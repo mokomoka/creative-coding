@@ -34,84 +34,98 @@ void draw() {
     j = 0;
   }
 
-  // 今は始点と終点のみisUsedとしているが、間も全て使用済み判定にして
-  // ぱっとみ全部埋まってる感じにしたい
   strokeCap(ROUND);
   strokeWeight(hole-8);
 
-  int count_lines = 0;
-  boolean rnd_i[] = new boolean[9];
-  boolean rnd_j[] = new boolean[9];
-  for (int a = 0; a < 9; a++) {
-    rnd_i[a] = false;
-    rnd_j[a] = false;
-  }
-  i = 0;
-  j = 0;
-  while (isUsedCount(points) < 81) {
-    i = int(random(9));
-    do {
-      j = int(random(9));
-      rnd_j[j] = true;
-      if(isAllTrue(rnd_j)) break;
-    } while (points[i][j].isUsed());
-    point1 = points[i][j];
-    points[i][j].use();
-    int k = j;
-    int l = i;
-    for (int a = 0; a < 9; a++) {
-      rnd_j[a] = false;
-    }
-    if (count_lines % 2 == 0) {
-      do {
-        j = int(random(9));
-        rnd_j[j] = true;
-        if(isAllTrue(rnd_j)) break;
-      } while (points[i][j].isUsed());
-      point2 = points[i][j];
-      points[i][j].use();
-      if (k > j) {
-        for (; k > j; k--) {
-          points[i][k].use();
-        }
-      } else {
-        for (; k < j; k++) {
-          points[i][k].use();
-        }
+  int to = 0; //方向を決める　偶数のとき横線、奇数のとき縦線
+  int l = 0;
+  int k = 0;
+  stroke(color_main1);
+
+  for (i = 0; i < points.length; i++) {
+    for (j = 0; j < points[i].length; j++) {
+      if(points[i][j].isUsed){
+        continue;
       }
-      stroke(color_main1);
-    } else {
-      do {
-        i = int(random(9));
-        rnd_i[i] = true;
-      } while (points[i][j].isUsed() && !isAllTrue(rnd_i));
-      point2 = points[i][j];
+      point1 = points[i][j];
       points[i][j].use();
-      if (l > i) {
-        for (; l > i; l--) {
-          points[l][j].use();
-        }
+      
+      if(isUsedLR(points, i, j) && isUsedUD(points, i, j)){
+        point2 = point1;
+        println(i, j, i, j);
+      } else if(!isUsedLR(points, i, j) && !isUsedUD(points, i, j)){
+        to++;
       } else {
-        for (; l < i; l++) {
-          points[l][j].use();
-        }
+        if (isUsedLR(points, i, j)) to = 1;
+        else to = 0;
       }
-      stroke(color_main2);
+      
+      if (to%2 == 0) {
+        do {
+          l = int(random(9));
+        } while (points[l][j].isUsed() && isUsedUD(points, l, j));
+        point2 = points[l][j];
+        points[l][j].use();
+        println(i, j, l, j);
+        if (l > i) {
+          for (; l > i; l--) {
+            points[l][j].use();
+          }
+        } else {
+          for (; l < i; l++) {
+            points[l][j].use();
+          }
+        }
+        stroke(color_main1);
+      } else {
+        do {
+          k = int(random(9));
+        } while (points[i][k].isUsed() && isUsedLR(points, i, k));
+        point2 = points[i][k];
+        points[i][k].use();
+        println(i, j, i, k);
+        if (k > j) {
+          for (; k > j; k--) {
+            points[i][k].use();
+          }
+        } else {
+          for (; k < j; k++) {
+            points[i][k].use();
+          }
+        }
+        stroke(color_main2);
+      }
+      point1.connect(point2);
     }
-    point1.connect(point2);
-    count_lines++;
   }
 
   noLoop();
 }
 
-boolean isAllTrue(boolean a[]) {
-  int count = 0;
-  for (int i = 0; i < a.length; i++) {
-    if (a[i]) count++;
+boolean isUsedLR(Point a[][], int i, int j) {
+  boolean isUsedL = false;
+  boolean isUsedR = false;
+  if (i == 0 || a[i-1][j].isUsed) {
+    isUsedL = true;
   }
-  if (count == a.length) return true;
-  else return false;
+  if (i == a.length-1 || a[i+1][j].isUsed) {
+    isUsedR = true;
+  }
+  //println(i, j, "isUsedLR " + str(isUsedL && isUsedR));
+  return isUsedL && isUsedR;
+}
+
+boolean isUsedUD(Point a[][], int i, int j) {
+  boolean isUsedU = false;
+  boolean isUsedD = false;
+  if (j == 0 || a[i][j-1].isUsed) {
+    isUsedU = true;
+  }
+  if (j == a[0].length-1 || a[i][j+1].isUsed) {
+    isUsedD = true;
+  }
+  //println(i, j, "isUsedUD " + str(isUsedU && isUsedD));
+  return isUsedU && isUsedD;
 }
 
 int isUsedCount(Point a[][]) {
@@ -123,6 +137,7 @@ int isUsedCount(Point a[][]) {
       }
     }
   }
+  println(count);
   return count;
 }
 
