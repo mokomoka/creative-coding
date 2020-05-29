@@ -4,11 +4,10 @@ int space = 80;
 int hole = 40;
 Point points[][] = new Point[9][9];
 Point point1, point2;
-String timestamp;
 
 void setup() {
   size(800, 800);
-  timestamp = str(year()) + nf(month(), 2) + nf(day(), 2);
+  noLoop();
 
   color_base = colors[int(random(3))];
   color_main1 = colors[int(random(3, 9))];
@@ -34,72 +33,86 @@ void draw() {
     j = 0;
   }
 
-  strokeCap(ROUND);
-  strokeWeight(hole-8);
-
   int to = 0; //方向を決める　偶数のとき横線、奇数のとき縦線
   int l = 0;
   int k = 0;
+  int old_l = 99;
+  int old_k = 99;
+  int count_same = 0;
+  strokeCap(ROUND);
+  strokeWeight(hole-8);
   stroke(color_main1);
 
   for (i = 0; i < points.length; i++) {
     for (j = 0; j < points[i].length; j++) {
-      if(points[i][j].isUsed){
+      if (points[i][j].isUsed) {
         continue;
       }
       point1 = points[i][j];
       points[i][j].use();
-      
-      if(isUsedLR(points, i, j) && isUsedUD(points, i, j)){
+
+      if (isUsedLR(points, i, j) && isUsedUD(points, i, j)) {
         point2 = point1;
         println(i, j, i, j);
-      } else if(!isUsedLR(points, i, j) && !isUsedUD(points, i, j)){
+      } else if (!isUsedLR(points, i, j) && !isUsedUD(points, i, j)) {
         to++;
       } else {
         if (isUsedLR(points, i, j)) to = 1;
         else to = 0;
       }
-      
+
+      count_same = 0;
       if (to%2 == 0) {
         do {
-          l = int(random(9));
-        } while (points[l][j].isUsed() && isUsedUD(points, l, j));
-        point2 = points[l][j];
-        points[l][j].use();
-        println(i, j, l, j);
-        if (l > i) {
-          for (; l > i; l--) {
-            points[l][j].use();
+          l = int(random(i, 9));
+          if (old_l != l) {
+            old_l = l;
+          } else {
+            count_same++;
+            if (count_same > 9) {
+              count_same = 99;
+              point2 = point1;
+              println(i, j, i, j);
+              break;
+            }
           }
-        } else {
-          for (; l < i; l++) {
+        } while (points[l][j].isUsed() || isUsedBetween(points, i, j, l, j));
+        if (count_same != 99) {
+          point2 = points[l][j];
+          println(i, j, l, j);
+          for (; l > i; l--) {
             points[l][j].use();
           }
         }
         stroke(color_main1);
       } else {
         do {
-          k = int(random(9));
-        } while (points[i][k].isUsed() && isUsedLR(points, i, k));
-        point2 = points[i][k];
-        points[i][k].use();
-        println(i, j, i, k);
-        if (k > j) {
-          for (; k > j; k--) {
-            points[i][k].use();
+          k = int(random(j, 9));
+          if (old_k != k) {
+            old_k = k;
+          } else {
+            count_same++;
+            if (count_same > 9) {
+              count_same = 99;
+              point2 = point1;
+              println(i, j, i, j);
+              break;
+            }
           }
-        } else {
-          for (; k < j; k++) {
+        } while (points[i][k].isUsed() || isUsedBetween(points, i, j, i, k));
+        if (count_same != 99) {
+          point2 = points[i][k];
+          println(i, j, i, k);
+          for (; k > j; k--) {
             points[i][k].use();
           }
         }
         stroke(color_main2);
       }
+
       point1.connect(point2);
     }
   }
-
-  noLoop();
 }
 
 boolean isUsedLR(Point a[][], int i, int j) {
@@ -128,6 +141,19 @@ boolean isUsedUD(Point a[][], int i, int j) {
   return isUsedU && isUsedD;
 }
 
+boolean isUsedBetween(Point a[][], int i, int j, int l, int k) {
+  if (i == l) {
+    for (int n = j+1; n < k; n++) {
+      if (a[i][n].isUsed) return true;
+    }
+  } else {
+    for (int n = i+1; n < l; n++) {
+      if (a[n][j].isUsed) return true;
+    }
+  }
+  return false;
+}
+
 int isUsedCount(Point a[][]) {
   int count = 0;
   for (int i = 0; i < a.length; i++) {
@@ -141,7 +167,21 @@ int isUsedCount(Point a[][]) {
   return count;
 }
 
+void mouseClicked() {
+  if (mouseButton == LEFT) {
+    redraw();
+  } else if (mouseButton == RIGHT) {
+    color_base = colors[int(random(3))];
+    color_main1 = colors[int(random(3, 9))];
+    do {
+      color_main2 = colors[int(random(3, 9))];
+    } while (color_main2 == color_main1);
+    color_accent = colors[9];
+    redraw();
+  }
+}
+
 void keyPressed() {
-  timestamp += nf(hour(), 2) + nf(minute(), 2) + nf(second(), 2);
+  String timestamp = str(year()) + nf(month(), 2) + nf(day(), 2) + nf(hour(), 2) + nf(minute(), 2) + nf(second(), 2);
   if (key == ENTER) saveFrame("frames/"+ timestamp +".png");
 }
