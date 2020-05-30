@@ -3,6 +3,8 @@ color colors[] = {#000000, #333333, #666666, #999999, #cccccc};
 
 void setup() {
   size(800, 800);
+  //noLoop();
+  frameRate(1);
 }
 
 void draw() {
@@ -30,7 +32,7 @@ void draw() {
   }
   type = choiceRnd(old.connectTypes(direction));
 
-  while (!isAllTrue(points)) {
+  while (trueCount(points) < 100) {
     count++;
     if (x < 0 || width < x || y < 0 || height < y) {
       do {
@@ -64,6 +66,8 @@ void draw() {
         y -= len;
         direction = "up";
         type = choiceRnd(old.connectTypes(direction));
+      } else if(trueCount(points) == points.length * points[0].length) {
+        break;
       } else {
         do {
           x = 40 + 80 * int(random(10));
@@ -79,17 +83,14 @@ int choiceRnd(int a[]) {
   return a[int(random(a.length))];
 }
 
-boolean isAllTrue(boolean b[][]) {
+int trueCount(boolean b[][]) {
+  int count = 0;
   for (int i = 0; i < b.length; i++) {
     for (int j = 0; j < b[i].length; j++) {
-      if (!b[i][j]) return false;
+      if (b[i][j]) count++;
     }
   }
-  return true;
-}
-
-void mouseClicked() {
-  redraw();
+  return count;
 }
 
 void keyPressed() {
