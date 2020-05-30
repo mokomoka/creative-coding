@@ -31,8 +31,6 @@ class Rail {
 
   void drawRail() {
     int len_half = len/2;
-    strokeWeight(16);
-    strokeCap(SQUARE);
     switch(type) {
     case 0:
       line(x-len_half, y, x+len_half, y);

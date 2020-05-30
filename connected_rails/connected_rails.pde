@@ -1,16 +1,21 @@
 int len = 80;
-color colors[] = {#000000, #333333, #666666, #999999, #cccccc};
+int start = 40;
+int weight = 16;
+//color colors[] = {#008dd6, #e3d600, #e13816, #008b42};
+color colors[] = {#5887bf, #f7ca11, #e56c3e, #3d9055};
 
 void setup() {
   size(800, 800);
   //noLoop();
   frameRate(1);
+  strokeWeight(weight);
+  strokeCap(SQUARE);
 }
 
 void draw() {
   background(255);
-  int x = 40;
-  int y = 40;
+  int x = start;
+  int y = start;
   int count = 0;
   boolean points[][] = new boolean[10][10];
   String direction = "";
@@ -36,18 +41,18 @@ void draw() {
     count++;
     if (x < 0 || width < x || y < 0 || height < y) {
       do {
-        x = 40 + 80 * int(random(10));
-        y = 40 + 80 * int(random(10));
-      } while (points[(x-40)/80][(y-40)/80]);
+        x = start + len * int(random(10));
+        y = start + len * int(random(10));
+      } while (points[(x-start)/len][(y-start)/len]);
       type = int(random(6));
     }
 
     if (type != -1) {
       now = new Rail(x, y, type);
-      stroke(colors[count%5]);
+      stroke(colors[count%colors.length]);
       now.drawRail();
-      int i = (x-40)/80;
-      int j = (y-40)/80;
+      int i = (x-start)/len;
+      int j = (y-start)/len;
       points[i][j] = true;
       old = now;
       if (old.getR() && i < 9 && !points[i+1][j]) {
@@ -70,9 +75,9 @@ void draw() {
         break;
       } else {
         do {
-          x = 40 + 80 * int(random(10));
-          y = 40 + 80 * int(random(10));
-        } while (points[(x-40)/80][(y-40)/80]);
+          x = start + len * int(random(10));
+          y = start + len * int(random(10));
+        } while (points[(x-start)/len][(y-start)/len]);
         type = int(random(6));
       }
     }
