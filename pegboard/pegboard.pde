@@ -42,14 +42,14 @@ void draw() {
     j = 0;
   }
 
-  int to = 0; //方向を決める　偶数のとき横線、奇数のとき縦線
-  int l = 0;
-  int k = 0;
+  int to = -1; //方向を決める　偶数のとき横線、奇数のとき縦線
+  int l = 0; // 2点目のi用
+  int k = 0; // 2点目のj用
   int old_l = 99;
   int old_k = 99;
   int count_same = 0;
   strokeCap(ROUND);
-  strokeWeight(hole-8);
+  strokeWeight(hole-16);
   stroke(color_main1);
 
   for (i = 0; i < points.length; i++) {
@@ -72,7 +72,7 @@ void draw() {
       count_same = 0;
       if (to%2 == 0) {
         do {
-          l = int(random(i, 9));
+          l = int(random(i, points.length));
           if (old_l != l) {
             old_l = l;
           } else {
@@ -93,7 +93,7 @@ void draw() {
         stroke(color_main1);
       } else {
         do {
-          k = int(random(j, 9));
+          k = int(random(j, points[i].length));
           if (old_k != k) {
             old_k = k;
           } else {
@@ -154,19 +154,6 @@ boolean isUsedBetween(Point a[][], int i, int j, int l, int k) {
     }
   }
   return false;
-}
-
-int isUsedCount(Point a[][]) {
-  int count = 0;
-  for (int i = 0; i < a.length; i++) {
-    for (int j = 0; j < a[0].length; j++) {
-      if (a[i][j].isUsed) {
-        count++;
-      }
-    }
-  }
-  println(count);
-  return count;
 }
 
 //void mouseClicked() {
