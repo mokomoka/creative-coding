@@ -7,17 +7,26 @@ Point point1, point2;
 
 void setup() {
   size(800, 800);
-  noLoop();
+  //noLoop();
+  frameRate(1);
 
-  color_base = colors[int(random(3))];
-  color_main1 = colors[int(random(3, 9))];
-  do {
-    color_main2 = colors[int(random(3, 9))];
-  } while (color_main2 == color_main1);
-  color_accent = colors[9];
+  //color_base = colors[int(random(3))];
+  //color_main1 = colors[int(random(3, 9))];
+  //do {
+  //  color_main2 = colors[int(random(3, 9))];
+  //} while (color_main2 == color_main1);
+  //color_accent = colors[9];
 }
 
 void draw() {
+  if (frameCount%8 == 1) {
+    color_base = colors[int(random(3))];
+    color_main1 = colors[int(random(3, 9))];
+    do {
+      color_main2 = colors[int(random(3, 9))];
+    } while (color_main2 == color_main1);
+  }
+
   background(color_base);
   fill(color_accent);
   noStroke();
@@ -53,7 +62,6 @@ void draw() {
 
       if (isUsedLR(points, i, j) && isUsedUD(points, i, j)) {
         point2 = point1;
-        println(i, j, i, j);
       } else if (!isUsedLR(points, i, j) && !isUsedUD(points, i, j)) {
         to++;
       } else {
@@ -72,14 +80,12 @@ void draw() {
             if (count_same > 9) {
               count_same = 99;
               point2 = point1;
-              println(i, j, i, j);
               break;
             }
           }
         } while (points[l][j].isUsed() || isUsedBetween(points, i, j, l, j));
         if (count_same != 99) {
           point2 = points[l][j];
-          println(i, j, l, j);
           for (; l > i; l--) {
             points[l][j].use();
           }
@@ -95,14 +101,12 @@ void draw() {
             if (count_same > 9) {
               count_same = 99;
               point2 = point1;
-              println(i, j, i, j);
               break;
             }
           }
         } while (points[i][k].isUsed() || isUsedBetween(points, i, j, i, k));
         if (count_same != 99) {
           point2 = points[i][k];
-          println(i, j, i, k);
           for (; k > j; k--) {
             points[i][k].use();
           }
@@ -124,7 +128,6 @@ boolean isUsedLR(Point a[][], int i, int j) {
   if (i == a.length-1 || a[i+1][j].isUsed) {
     isUsedR = true;
   }
-  //println(i, j, "isUsedLR " + str(isUsedL && isUsedR));
   return isUsedL && isUsedR;
 }
 
@@ -137,7 +140,6 @@ boolean isUsedUD(Point a[][], int i, int j) {
   if (j == a[0].length-1 || a[i][j+1].isUsed) {
     isUsedD = true;
   }
-  //println(i, j, "isUsedUD " + str(isUsedU && isUsedD));
   return isUsedU && isUsedD;
 }
 
@@ -167,19 +169,19 @@ int isUsedCount(Point a[][]) {
   return count;
 }
 
-void mouseClicked() {
-  if (mouseButton == LEFT) {
-    redraw();
-  } else if (mouseButton == RIGHT) {
-    color_base = colors[int(random(3))];
-    color_main1 = colors[int(random(3, 9))];
-    do {
-      color_main2 = colors[int(random(3, 9))];
-    } while (color_main2 == color_main1);
-    color_accent = colors[9];
-    redraw();
-  }
-}
+//void mouseClicked() {
+//  if (mouseButton == LEFT) {
+//    redraw();
+//  } else if (mouseButton == RIGHT) {
+//    color_base = colors[int(random(3))];
+//    color_main1 = colors[int(random(3, 9))];
+//    do {
+//      color_main2 = colors[int(random(3, 9))];
+//    } while (color_main2 == color_main1);
+//    color_accent = colors[9];
+//    redraw();
+//  }
+//}
 
 void keyPressed() {
   String timestamp = str(year()) + nf(month(), 2) + nf(day(), 2) + nf(hour(), 2) + nf(minute(), 2) + nf(second(), 2);
