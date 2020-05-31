@@ -15,7 +15,7 @@ void setup() {
   //do {
   //  color_main2 = colors[int(random(3, 9))];
   //} while (color_main2 == color_main1);
-  //color_accent = colors[9];
+  color_accent = colors[9];
 }
 
 void draw() {
@@ -54,7 +54,7 @@ void draw() {
 
   for (i = 0; i < points.length; i++) {
     for (j = 0; j < points[i].length; j++) {
-      if (points[i][j].isUsed) {
+      if (points[i][j].isUsed()) {
         continue;
       }
       point1 = points[i][j];
@@ -122,10 +122,10 @@ void draw() {
 boolean isUsedLR(Point a[][], int i, int j) {
   boolean isUsedL = false;
   boolean isUsedR = false;
-  if (i == 0 || a[i-1][j].isUsed) {
+  if (i == 0 || a[i-1][j].isUsed()) {
     isUsedL = true;
   }
-  if (i == a.length-1 || a[i+1][j].isUsed) {
+  if (i == a.length-1 || a[i+1][j].isUsed()) {
     isUsedR = true;
   }
   return isUsedL && isUsedR;
@@ -134,10 +134,10 @@ boolean isUsedLR(Point a[][], int i, int j) {
 boolean isUsedUD(Point a[][], int i, int j) {
   boolean isUsedU = false;
   boolean isUsedD = false;
-  if (j == 0 || a[i][j-1].isUsed) {
+  if (j == 0 || a[i][j-1].isUsed()) {
     isUsedU = true;
   }
-  if (j == a[0].length-1 || a[i][j+1].isUsed) {
+  if (j == a[0].length-1 || a[i][j+1].isUsed()) {
     isUsedD = true;
   }
   return isUsedU && isUsedD;
@@ -146,11 +146,11 @@ boolean isUsedUD(Point a[][], int i, int j) {
 boolean isUsedBetween(Point a[][], int i, int j, int l, int k) {
   if (i == l) {
     for (int n = j+1; n < k; n++) {
-      if (a[i][n].isUsed) return true;
+      if (a[i][n].isUsed()) return true;
     }
   } else {
     for (int n = i+1; n < l; n++) {
-      if (a[n][j].isUsed) return true;
+      if (a[n][j].isUsed()) return true;
     }
   }
   return false;

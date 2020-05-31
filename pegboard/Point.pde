@@ -1,6 +1,6 @@
 class Point {
-  int x, y;
-  boolean isUsed = false;
+  private int x, y;
+  private boolean used_flag = false;
 
   Point(int x, int y) {
     this.x = x;
@@ -8,11 +8,11 @@ class Point {
   }
 
   void use() {
-    this.isUsed = true;
+    this.used_flag = true;
   }
 
   boolean isUsed() {
-    return this.isUsed;
+    return this.used_flag;
   }
   
   void connect(Point a) {
