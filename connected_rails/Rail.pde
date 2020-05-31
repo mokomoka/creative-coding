@@ -1,6 +1,6 @@
 class Rail {
-  int x, y, type;
-  boolean canConnectR, canConnectL, canConnectU, canConnectD;
+  private int x, y, type;
+  private boolean canConnectR, canConnectL, canConnectU, canConnectD;
 
   Rail(int x, int y, int type) {
     this.x = x;
