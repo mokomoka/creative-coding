@@ -1,14 +1,10 @@
 int len = 80;
 int start = 40;
-int weight = 16;
-//color colors[] = {#008dd6, #e3d600, #e13816, #008b42};
-color colors[] = {#5887bf, #f7ca11, #e56c3e, #3d9055};
 
 void setup() {
   size(800, 800);
   //noLoop();
   frameRate(1);
-  strokeWeight(weight);
   strokeCap(SQUARE);
 }
 
@@ -25,7 +21,6 @@ void draw() {
     type = int(random(6));
   } while (type == 3);
   old = new Rail(x, y, type);
-  stroke(colors[count]);
   old.drawRail();
   points[0][0] = true;
   if (old.getR()) {
@@ -49,7 +44,6 @@ void draw() {
 
     if (type != -1) {
       now = new Rail(x, y, type);
-      stroke(colors[count%colors.length]);
       now.drawRail();
       int i = (x-start)/len;
       int j = (y-start)/len;
@@ -71,7 +65,7 @@ void draw() {
         y -= len;
         direction = "up";
         type = choiceRnd(old.connectTypes(direction));
-      } else if(trueCount(points) == points.length * points[0].length) {
+      } else if (trueCount(points) == points.length * points[0].length) {
         break;
       } else {
         do {

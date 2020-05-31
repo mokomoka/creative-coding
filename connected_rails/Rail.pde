@@ -31,24 +31,75 @@ class Rail {
 
   void drawRail() {
     int len_half = len/2;
+    int space_rail = 16;
+    int len_sleeper = space_rail + 8;
+    int offset_sleeper = 8;
+    int weight_rail = 8;
+    int weight_sleeper = 8;
+    color color_rail = #3b2f2b;
+    color color_sleeper = #8a7365;
+    noFill();
+
     switch(type) {
     case 0:
-      line(x-len_half, y, x+len_half, y);
+      strokeWeight(weight_sleeper);
+      stroke(color_sleeper);
+      line(x-len_half+offset_sleeper, y-len_sleeper, x-len_half+offset_sleeper, y+len_sleeper);
+      line(x+offset_sleeper, y-len_sleeper, x+offset_sleeper, y+len_sleeper);
+      strokeWeight(weight_rail);
+      stroke(color_rail);
+      line(x-len_half, y-space_rail, x+len_half, y-space_rail);
+      line(x-len_half, y+space_rail, x+len_half, y+space_rail);
       break;
     case 1:
-      line(x, y-len_half, x, y+len_half);
+      strokeWeight(weight_sleeper);
+      stroke(color_sleeper);
+      line(x-len_sleeper, y-len_half+offset_sleeper, x+len_sleeper, y-len_half+offset_sleeper);
+      line(x-len_sleeper, y+offset_sleeper, x+len_sleeper, y+offset_sleeper);
+      strokeWeight(weight_rail);
+      stroke(color_rail);
+      line(x-space_rail, y-len_half, x-space_rail, y+len_half);
+      line(x+space_rail, y-len_half, x+space_rail, y+len_half);
       break;
     case 2:
-      bezier(x-len_half, y, x, y, x, y, x, y+len_half);
+      strokeWeight(weight_sleeper);
+      stroke(color_sleeper);
+      line(x-len_half+offset_sleeper, y-len_sleeper, x-len_half+offset_sleeper, y+len_sleeper);
+      line(x-len_sleeper, y+len_half-offset_sleeper, x+len_sleeper, y+len_half-offset_sleeper);
+      strokeWeight(weight_rail);
+      stroke(color_rail);
+      bezier(x-len_half, y-space_rail, x+space_rail, y-space_rail, x+space_rail, y-space_rail, x+space_rail, y+len_half);
+      bezier(x-len_half, y+space_rail, x-space_rail, y+space_rail, x-space_rail, y+space_rail, x-space_rail, y+len_half);
       break;
     case 3:
-      bezier(x-len_half, y, x, y, x, y, x, y-len_half);
+      strokeWeight(weight_sleeper);
+      stroke(color_sleeper);
+      line(x-len_half+offset_sleeper, y-len_sleeper, x-len_half+offset_sleeper, y+len_sleeper);
+      line(x-len_sleeper, y-len_half+offset_sleeper, x+len_sleeper, y-len_half+offset_sleeper);
+      strokeWeight(weight_rail);
+      stroke(color_rail);
+      bezier(x-len_half, y-space_rail, x-space_rail, y-space_rail, x-space_rail, y-space_rail, x-space_rail, y-len_half);
+      bezier(x-len_half, y+space_rail, x+space_rail, y+space_rail, x+space_rail, y+space_rail, x+space_rail, y-len_half);
       break;
     case 4:
-      bezier(x, y-len_half, x, y, x, y, x+len_half, y);
+      strokeWeight(weight_sleeper);
+      stroke(color_sleeper);
+      line(x-len_sleeper, y-len_half+offset_sleeper, x+len_sleeper, y-len_half+offset_sleeper);
+      line(x+len_half-offset_sleeper, y-len_sleeper, x+len_half-offset_sleeper, y+len_sleeper);
+      strokeWeight(weight_rail);
+      stroke(color_rail);
+      bezier(x-space_rail, y-len_half, x-space_rail, y+space_rail, x-space_rail, y+space_rail, x+len_half, y+space_rail);
+      bezier(x+space_rail, y-len_half, x+space_rail, y-space_rail, x+space_rail, y-space_rail, x+len_half, y-space_rail);
       break;
     case 5:
-      bezier(x, y+len_half, x, y, x, y, x+len_half, y);
+      strokeWeight(weight_sleeper);
+      stroke(color_sleeper);
+      line(x+len_half-offset_sleeper, y-len_sleeper, x+len_half-offset_sleeper, y+len_sleeper);
+      line(x-len_sleeper, y+len_half-offset_sleeper, x+len_sleeper, y+len_half-offset_sleeper);
+      strokeWeight(weight_rail);
+      stroke(color_rail);
+      bezier(x-space_rail, y+len_half, x-space_rail, y-space_rail, x-space_rail, y-space_rail, x+len_half, y-space_rail);
+      bezier(x+space_rail, y+len_half, x+space_rail, y+space_rail, x+space_rail, y+space_rail, x+len_half, y+space_rail);
       break;
     }
   }
@@ -76,17 +127,17 @@ class Rail {
     }
     return result;
   }
-  
-  boolean getL(){
+
+  boolean getL() {
     return canConnectL;
   }
-  boolean getR(){
+  boolean getR() {
     return canConnectR;
   }
-  boolean getU(){
+  boolean getU() {
     return canConnectU;
   }
-  boolean getD(){
+  boolean getD() {
     return canConnectD;
   }
 }
