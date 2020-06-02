@@ -9,7 +9,7 @@ void setup() {
 }
 
 void draw() {
-  background(255);
+  background(250);
   int x = start;
   int y = start;
   int count = 0;
@@ -21,7 +21,7 @@ void draw() {
     type = int(random(6));
   } while (type == 3);
   old = new Rail(x, y, type);
-  old.drawRail();
+  old.setRail();
   points[0][0] = true;
   if (old.getR()) {
     x += len;
@@ -32,8 +32,9 @@ void draw() {
   }
   type = choiceRnd(old.connectTypes(direction));
 
-  while (trueCount(points) < 100) {
-    count++;
+  while (trueCount(points) < 100) { //行き止まりになったら終わりにしたい場合はコメントアウトする
+  //while (count < 100) { //行き止まりになったら終わりにしたい場合はもとに戻す
+  //  count++;
     if (x < 0 || width < x || y < 0 || height < y) {
       do {
         x = start + len * int(random(10));
@@ -44,7 +45,7 @@ void draw() {
 
     if (type != -1) {
       now = new Rail(x, y, type);
-      now.drawRail();
+      now.setRail();
       int i = (x-start)/len;
       int j = (y-start)/len;
       points[i][j] = true;
@@ -67,7 +68,7 @@ void draw() {
         type = choiceRnd(old.connectTypes(direction));
       } else if (trueCount(points) == points.length * points[0].length) {
         break;
-      } else {
+      } else { //行き止まりになったら終わりにしたい場合はコメントアウトする
         do {
           x = start + len * int(random(10));
           y = start + len * int(random(10));

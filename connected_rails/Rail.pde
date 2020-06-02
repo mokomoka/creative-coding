@@ -29,77 +29,43 @@ class Rail {
     }
   }
 
-  void drawRail() {
-    int len_half = len/2;
-    int space_rail = 16;
-    int len_sleeper = space_rail + 8;
-    int offset_sleeper = 8;
-    int weight_rail = 8;
-    int weight_sleeper = 8;
-    color color_rail = #3b2f2b;
-    color color_sleeper = #8a7365;
-    noFill();
+  void setRail() {
+
 
     switch(type) {
     case 0:
-      strokeWeight(weight_sleeper);
-      stroke(color_sleeper);
-      line(x-len_half+offset_sleeper, y-len_sleeper, x-len_half+offset_sleeper, y+len_sleeper);
-      line(x+offset_sleeper, y-len_sleeper, x+offset_sleeper, y+len_sleeper);
-      strokeWeight(weight_rail);
-      stroke(color_rail);
-      line(x-len_half, y-space_rail, x+len_half, y-space_rail);
-      line(x-len_half, y+space_rail, x+len_half, y+space_rail);
+      drawRail(x, y, type);
       break;
     case 1:
-      strokeWeight(weight_sleeper);
-      stroke(color_sleeper);
-      line(x-len_sleeper, y-len_half+offset_sleeper, x+len_sleeper, y-len_half+offset_sleeper);
-      line(x-len_sleeper, y+offset_sleeper, x+len_sleeper, y+offset_sleeper);
-      strokeWeight(weight_rail);
-      stroke(color_rail);
-      line(x-space_rail, y-len_half, x-space_rail, y+len_half);
-      line(x+space_rail, y-len_half, x+space_rail, y+len_half);
+      pushMatrix();
+      translate(x, y);
+      rotate(PI / 2.0);
+      drawRail(0, 0, type);
+      popMatrix();
       break;
     case 2:
-      strokeWeight(weight_sleeper);
-      stroke(color_sleeper);
-      line(x-len_half+offset_sleeper, y-len_sleeper, x-len_half+offset_sleeper, y+len_sleeper);
-      line(x-len_sleeper, y+len_half-offset_sleeper, x+len_sleeper, y+len_half-offset_sleeper);
-      strokeWeight(weight_rail);
-      stroke(color_rail);
-      bezier(x-len_half, y-space_rail, x+space_rail, y-space_rail, x+space_rail, y-space_rail, x+space_rail, y+len_half);
-      bezier(x-len_half, y+space_rail, x-space_rail, y+space_rail, x-space_rail, y+space_rail, x-space_rail, y+len_half);
+      drawRail(x, y, type);
       break;
     case 3:
-      strokeWeight(weight_sleeper);
-      stroke(color_sleeper);
-      line(x-len_half+offset_sleeper, y-len_sleeper, x-len_half+offset_sleeper, y+len_sleeper);
-      line(x-len_sleeper, y-len_half+offset_sleeper, x+len_sleeper, y-len_half+offset_sleeper);
-      strokeWeight(weight_rail);
-      stroke(color_rail);
-      bezier(x-len_half, y-space_rail, x-space_rail, y-space_rail, x-space_rail, y-space_rail, x-space_rail, y-len_half);
-      bezier(x-len_half, y+space_rail, x+space_rail, y+space_rail, x+space_rail, y+space_rail, x+space_rail, y-len_half);
+      pushMatrix();
+      translate(x, y);
+      rotate(PI / 2.0);
+      drawRail(0, 0, type);
+      popMatrix();
       break;
     case 4:
-      strokeWeight(weight_sleeper);
-      stroke(color_sleeper);
-      line(x-len_sleeper, y-len_half+offset_sleeper, x+len_sleeper, y-len_half+offset_sleeper);
-      line(x+len_half-offset_sleeper, y-len_sleeper, x+len_half-offset_sleeper, y+len_sleeper);
-      strokeWeight(weight_rail);
-      stroke(color_rail);
-      bezier(x-space_rail, y-len_half, x-space_rail, y+space_rail, x-space_rail, y+space_rail, x+len_half, y+space_rail);
-      bezier(x+space_rail, y-len_half, x+space_rail, y-space_rail, x+space_rail, y-space_rail, x+len_half, y-space_rail);
+      pushMatrix();
+      translate(x, y);
+      rotate(PI);
+      drawRail(0, 0, type);
+      popMatrix();
       break;
     case 5:
-      strokeWeight(weight_sleeper);
-      stroke(color_sleeper);
-      line(x+len_half-offset_sleeper, y-len_sleeper, x+len_half-offset_sleeper, y+len_sleeper);
-      line(x-len_sleeper, y+len_half-offset_sleeper, x+len_sleeper, y+len_half-offset_sleeper);
-      strokeWeight(weight_rail);
-      stroke(color_rail);
-      bezier(x-space_rail, y+len_half, x-space_rail, y-space_rail, x-space_rail, y-space_rail, x+len_half, y-space_rail);
-      bezier(x+space_rail, y+len_half, x+space_rail, y+space_rail, x+space_rail, y+space_rail, x+len_half, y+space_rail);
+      pushMatrix();
+      translate(x, y);
+      rotate(PI * 3 / 2.0);
+      drawRail(0, 0, type);
+      popMatrix();
       break;
     }
   }
@@ -139,5 +105,36 @@ class Rail {
   }
   boolean getD() {
     return canConnectD;
+  }
+
+  void drawRail(int x, int y, int type) {
+    int len_half = len/2;
+    int space_rail = 16;
+    int len_sleeper = space_rail + 8;
+    float offset_sleeper = len/6.0;
+    int weight_rail = 8;
+    int weight_sleeper = 8;
+    color color_rail = #5e574f;
+    color color_sleeper = #8a7365;
+    noFill();
+    strokeWeight(weight_sleeper);
+    stroke(color_sleeper);
+
+    if (type <= 1) {
+      line(x-offset_sleeper*2, y-len_sleeper, x-offset_sleeper*2, y+len_sleeper);
+      line(x, y-len_sleeper, x, y+len_sleeper);
+      line(x+offset_sleeper*2, y-len_sleeper, x+offset_sleeper*2, y+len_sleeper);
+      strokeWeight(weight_rail);
+      stroke(color_rail);
+      line(x-len_half, y-space_rail, x+len_half, y-space_rail);
+      line(x-len_half, y+space_rail, x+len_half, y+space_rail);
+    } else {
+      line(x-len_half+12, y+len_half-16, x-offset_sleeper, y-len_sleeper);
+      line(x-len_half+16, y+len_half-12, x+len_sleeper, y+offset_sleeper);
+      strokeWeight(weight_rail);
+      stroke(color_rail);
+      bezier(x-len_half, y-space_rail, x+space_rail, y-space_rail, x+space_rail, y-space_rail, x+space_rail, y+len_half);
+      bezier(x-len_half, y+space_rail, x-space_rail, y+space_rail, x-space_rail, y+space_rail, x-space_rail, y+len_half);
+    }
   }
 }
